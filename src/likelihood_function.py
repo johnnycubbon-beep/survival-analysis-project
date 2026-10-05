@@ -3,7 +3,7 @@
 import numpy as np
 
 
-DEFAULT_COVARIATES = ("age", "ecog", "karnoPH", "karnoPAT")
+DEFAULT_COVARIATES = ("age", "sex", "ecog", "karnoPH", "karnoPAT")
 
 
 def efron_log_likelihood(beta, data, covariate_columns=DEFAULT_COVARIATES):
@@ -36,6 +36,8 @@ def efron_log_likelihood(beta, data, covariate_columns=DEFAULT_COVARIATES):
             f"beta has {beta.size} values, but {len(covariate_columns)} "
             "covariates were specified"
         )
+    if not np.isfinite(beta).all():
+        raise ValueError("beta must contain only finite values")
 
     try:
         times = data["TIME"].to_numpy(dtype=float)

@@ -27,6 +27,8 @@ def _model_arrays(beta, data, covariate_columns=DEFAULT_COVARIATES):
         raise ValueError(
             f"Expected {len(covariate_columns)} coefficients; got {beta.size}"
         )
+    if not np.isfinite(beta).all():
+        raise ValueError("beta must contain only finite values")
 
     # Reuse the public likelihood's input checks.
     efron_log_likelihood(np.zeros_like(beta), data, covariate_columns)
@@ -123,6 +125,14 @@ def main():
     missing = [column for column in required if column not in raw.columns]
     if missing:
         raise ValueError(f"Dataset is missing required columns: {missing}")
+
+    sex = raw["sex"].astype("string").str.strip().str.upper()
+    if sex.isna().any():
+        raise ValueError("sex contains missing values")
+    unexpected_sex = sorted(set(sex.unique()) - {"M", "F"})
+    if unexpected_sex:
+        raise ValueError(f"Unexpected sex categories: {unexpected_sex}; expected M or F")
+    raw["sex"] = sex.map({"M": 1.0, "F": -1.0})
 
     # This file stores each patient twice: a TIME=0 entry and a final follow-up
     # entry. Use the final row per ID to construct one duration/event per person.

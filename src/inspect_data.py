@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 df = pd.read_csv("C:/Users/johnn/Documents/Python/Survival_Analysis_Project/data/raw/lung_cancer.xls")
 print(df.columns)
+print(df["sex"].unique())
 # count_1 = df["karnoPH"].value_counts()
 # count_2 = df["karnoPAT"].value_counts()
 
@@ -44,20 +45,20 @@ print(df.columns)
 
 # print(total/len(ecog_vals))
 
-df_relevant = df[df["TIME"]>0]
-df_relevant = df_relevant.sort_values(["TIME","ID"])
-# print(df.groupby("ID")["Y"].apply(lambda x: x.max()).sum())
+# df_relevant = df[df["TIME"]>0]
+# df_relevant = df_relevant.sort_values(["TIME","ID"])
+# # print(df.groupby("ID")["Y"].apply(lambda x: x.max()).sum())
 
 
-info = pd.DataFrame()
-death_times = df[df["Y"]==1]["TIME"].value_counts()
-death_times = death_times.sort_index(axis="index",ascending=True)
-info["death_times"] = death_times.index
-info["death_freq"] = death_times.values
+# info = pd.DataFrame()
+# death_times = df[df["Y"]==1]["TIME"].value_counts()
+# death_times = death_times.sort_index(axis="index",ascending=True)
+# info["death_times"] = death_times.index
+# info["death_freq"] = death_times.values
 
-print(info.head())
+# print(info.head())
 
 
-theta_vals = {}
+# theta_vals = {}
 
 
